@@ -3,14 +3,13 @@ from prefect import flow, task
 from prefect.tasks import task_input_hash
 from prefect import get_run_logger
 
-
 @task
 def get_name(firstname: str, lastname: str):
     logger = get_run_logger()
     logger.info("Received the user's name 📄")
     return f"{firstname} {lastname}"
 
-@task(cache_key_fn=task_input_hash, cache_expiration=timedelta(days=1))
+@task
 def say_hi(user_name: str):
     logger = get_run_logger()
     logger.info("Caching results for 1 day 💾")
@@ -33,6 +32,6 @@ def log_data_from_other_subflow(user_name: str):
 def pass_data_between_subflows(firstname= 'Marvin', lastname ='Duck'):
     user = hello_world(firstname, lastname)
     log_data_from_other_subflow(user)
-
+    
 if __name__ == "__main__":
     pass_data_between_subflows()
