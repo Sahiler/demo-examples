@@ -137,7 +137,7 @@ def user_input_num_of_rows():
 
 
 @flow()
-def user_input_num_of_features(raw_data):
+def user_input_remove_features(raw_data):
     description_md = f"""
     **Welcome to the User Greeting Flow!**
     Columns available: {raw_data.get('results')[0].keys()}
@@ -150,6 +150,9 @@ def user_input_num_of_features(raw_data):
                                                                                                   "phone", "cell", "id", "nat"]))
     print(user_input.features_to_drop)
     print(type(user_input.features_to_drop))
+
+    # do cleaning within this function for the features to drop
+
     return user_input.features_to_drop
 
 @flow(name="Create Names")
@@ -163,12 +166,14 @@ def create_names(num: int = 2):
         df.append(clean(raw_data))
         num -= 1
     logger.info(f"create {copy} names: {df}")
-    user_input_num_of_features(raw_data)
+    cleaned_data = user_input_remove_features(raw_data)
 
     return df
 
 @flow(name="Redeploy Flow")
 def redeploy_flow():
+
+    ## showcase features that are dropped in the final map, and ask for user approval to create artifact
     logger = get_run_logger()
     user_input = pause_flow_run(wait_for_input = NameInput)
     if user_input.first_name != None:
@@ -188,7 +193,9 @@ def redeploy_flow():
     else:
         raise Exception("User did not approve")
     
-    
+
+# do some ML model that uses this approved artifact, potentially a clustering kmeans model
+# ask for user input for number of clusters
 
 if __name__ == "__main__":
     
