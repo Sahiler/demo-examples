@@ -7,6 +7,8 @@ if __name__ == "__main__":
         source="https://github.com/Sahiler/demo-examples.git",
         entrypoint="subflow_example.py:pass_data_between_subflows",
     ).deploy(
-        name="test-push-pool-flow",
-        work_pool_name="easy-push-pool"
+        name="test-managed-execution-flow",
+        work_pool_name="managed-execution"
+        #name="test-push-pool-flow",
+        #work_pool_name="easy-push-pool"
     )
